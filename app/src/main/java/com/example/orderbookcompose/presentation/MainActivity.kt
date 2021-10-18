@@ -1,4 +1,4 @@
-package com.example.orderbookcompose
+package com.example.orderbookcompose.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.orderbookcompose.ui.theme.OrderBookComposeTheme
+import com.example.orderbookcompose.presentation.ui.theme.OrderBookComposeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

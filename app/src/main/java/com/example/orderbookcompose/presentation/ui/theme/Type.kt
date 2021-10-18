@@ -1,4 +1,4 @@
-package com.example.orderbookcompose.ui.theme
+package com.example.orderbookcompose.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
