@@ -2,6 +2,7 @@ package com.example.orderbookcompose.di
 
 import com.example.orderbookcompose.common.Constants
 import com.example.orderbookcompose.data.network.CoinPaprikaApi
+import com.example.orderbookcompose.data.network.CoinbaseApi
 import com.example.orderbookcompose.data.repository.CoinRepositoryImpl
 import com.example.orderbookcompose.domain.repository.CoinRepository
 import dagger.Module
@@ -20,7 +21,7 @@ object AppModule {
     @Singleton
     fun providePaprikaApi(): CoinPaprikaApi{
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(Constants.PAPRIKA_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CoinPaprikaApi::class.java)
@@ -28,7 +29,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoinRepository(api: CoinPaprikaApi): CoinRepository{
-        return CoinRepositoryImpl(api)
+    fun provideCoinbaseApi(): CoinbaseApi{
+        return Retrofit.Builder()
+            .baseUrl(Constants.COINBASE_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CoinbaseApi::class.java)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideCoinRepository(paprikaApi: CoinPaprikaApi, coinbaseApi: CoinbaseApi): CoinRepository{
+        return CoinRepositoryImpl(paprikaApi, coinbaseApi)
     }
 }

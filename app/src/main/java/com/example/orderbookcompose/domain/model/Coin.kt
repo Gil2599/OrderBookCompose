@@ -5,6 +5,6 @@ data class Coin(
     val isActive: Boolean,
     val name: String,
     val rank: Int,
-    val symbol: String,
+    val symbol: String
 )
 
