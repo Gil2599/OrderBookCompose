@@ -8,11 +8,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.orderbookcompose.common.Constants
 import com.example.orderbookcompose.common.Resource
 import com.example.orderbookcompose.domain.use_case.get_coin.GetCoinUseCase
-import com.example.orderbookcompose.domain.use_case.get_coins.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.reactivestreams.Subscription
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 @HiltViewModel
 class CoinDetailViewModel @Inject constructor(
