@@ -7,10 +7,12 @@ task clean(type: Delete) {
 buildscript {
     ext {
         compose_version = '1.0.4'
+        scarlet_version = '0.1.12'
     }
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.3"

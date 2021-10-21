@@ -6,7 +6,8 @@ object Constants {
 
     const val COINBASE_BASE_URL = "https://api.coinbase.com/"
 
+    const val SOCKET_BASE_URL = "wss://ws-feed.pro.coinbase.com"
+
     const val PARAM_COIN_ID = "coinId"
 
-    const val PARAM_COIN_SYMBOL = "coinSymbol"
 }
