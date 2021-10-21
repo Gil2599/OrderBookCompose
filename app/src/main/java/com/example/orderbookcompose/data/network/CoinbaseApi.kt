@@ -8,4 +8,5 @@ interface CoinbaseApi {
 
     @GET("/v2/prices/{coinSymbol}-USD/spot")
     suspend fun getPrice(@Path("coinSymbol") coinSymbol: String): CoinPriceDto
+
 }

@@ -9,6 +9,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.orderbookcompose.data.network.dto.TeamMember
 import com.example.orderbookcompose.presentation.Screen
+import com.example.orderbookcompose.presentation.coin_detail.components.CoinPrice
 import com.example.orderbookcompose.presentation.coin_detail.components.CoinTag
 import com.example.orderbookcompose.presentation.coin_detail.components.TeamListItem
 import com.example.orderbookcompose.presentation.coin_list.components.CoinListItem
@@ -60,6 +63,14 @@ fun CoinDetailScreen(
                         text = coin.description,
                         style = MaterialTheme.typography.body2
                     )
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Column(modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = CenterHorizontally
+                    ) {
+                        CoinPrice(price = coin.price)
+                    }
+                    
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
                         text = "Tags",

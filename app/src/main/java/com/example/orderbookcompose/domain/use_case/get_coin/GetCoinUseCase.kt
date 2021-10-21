@@ -21,7 +21,13 @@ class GetCoinUseCase @Inject constructor(
             emit(Resource.Loading<CoinDetail>())
 
             val coin = repository.getCoinById(coinId).toCoinDetail()
-            repository.getPrice(coin.symbol).updateCoinPrice(coin)
+
+            try {
+                repository.getPrice(coin.symbol).updateCoinPrice(coin)
+
+            } catch (e: HttpException){
+                emit(Resource.Error<CoinDetail>(e.localizedMessage?: "An unexpected error occurred"))
+            }
 
             Log.e("Price", coin.price.toString())
 
