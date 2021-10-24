@@ -1,14 +1,16 @@
 package com.example.orderbookcompose.di
 
+import android.app.Application
 import com.example.orderbookcompose.common.Constants
-import com.example.orderbookcompose.common.Constants.SOCKET_BASE_URL
 import com.example.orderbookcompose.data.network.CoinPaprikaApi
 import com.example.orderbookcompose.data.network.CoinbaseApi
+import com.example.orderbookcompose.data.network.web_socket.CoinbaseWebSocketListener
+import com.example.orderbookcompose.data.network.web_socket.WebSocketServiceProvider
+import com.example.orderbookcompose.data.network.web_socket.dto.SocketSubscribeDto
 import com.example.orderbookcompose.data.repository.CoinRepositoryImpl
+import com.example.orderbookcompose.data.repository.WebSocketRepositoryImpl
 import com.example.orderbookcompose.domain.repository.CoinRepository
-import com.example.orderbookcompose.domain.repository.SocketService
-import com.tinder.scarlet.Scarlet
-import com.tinder.scarlet.retry.ExponentialWithJitterBackoffStrategy
+import com.example.orderbookcompose.domain.repository.WebSocketRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,17 +45,23 @@ object AppModule {
 
     /*@Provides
     @Singleton
-    fun provideWebSocketService(): SocketService{
-        return Scarlet.Builder()
-            .webSocketFactory(okHttpClient.newWebSocketFactory(SOCKET_BASE_URL))
-            .addMessageAdapterFactory(MoshiMessageAdapter.Factory())
-            .addStreamAdapterFactory(RxJava2StreamAdapterFactory())
-            .backoffStrategy(ExponentialWithJitterBackoffStrategy(5000, 5000))
-            .lifecycle(lifecycle)
-            .build()
-            .create()
-    }*/
+    fun provideCoinbaseWebSocketListener(): CoinbaseWebSocketListener{
+        return CoinbaseWebSocketListener(
+            SocketSubscribeDto(
+            listOf("level2"),
+            listOf("BTC-USDC"),
+            "subscribe"
+        )
+        )
 
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebSocketRepository(webSocketServiceProvider: WebSocketServiceProvider): WebSocketRepository{
+        return WebSocketRepositoryImpl(webSocketServiceProvider)
+    }
+*/
 
     @Provides
     @Singleton

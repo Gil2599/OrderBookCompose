@@ -24,4 +24,5 @@ class CoinRepositoryImpl @Inject constructor(
     override suspend fun getPrice(coinSymbol: String): CoinPriceDto{
         return coinbaseApi.getPrice(coinSymbol)
     }
+
 }

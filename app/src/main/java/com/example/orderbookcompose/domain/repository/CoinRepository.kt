@@ -11,4 +11,5 @@ interface CoinRepository {
     suspend fun getCoinById(coinId: String): CoinDetailDto
 
     suspend fun getPrice(coinSymbol: String): CoinPriceDto
+
 }
