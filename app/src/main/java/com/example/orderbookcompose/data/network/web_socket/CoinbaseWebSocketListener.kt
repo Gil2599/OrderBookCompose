@@ -1,24 +1,23 @@
 package com.example.orderbookcompose.data.network.web_socket
 
 import android.util.Log
-import com.example.orderbookcompose.common.Constants
+import com.example.orderbookcompose.data.network.web_socket.dto.SocketResponseDto
 import com.example.orderbookcompose.data.network.web_socket.dto.SocketSubscribeDto
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
-import javax.inject.Inject
 
 class CoinbaseWebSocketListener (marketRequest: SocketSubscribeDto): WebSocketListener() {
     private var requestMarket: SocketSubscribeDto = marketRequest
 
-    val socketEventChannel: Channel<SocketUpdate> = Channel()
+    val socketEventChannel: Channel<SocketResponseDto> = Channel()
     private val GSON = GsonBuilder().setPrettyPrinting().create()
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -27,15 +26,15 @@ class CoinbaseWebSocketListener (marketRequest: SocketSubscribeDto): WebSocketLi
 
     override fun onMessage(webSocket: WebSocket, text: String) {
 
-        Log.e("Test", SocketUpdate(text).text.toString())
+        //Log.e("Test", SocketUpdate(text).text.toString())
         CoroutineScope(Dispatchers.Default).launch {
             try {
-                //Log.e("Test", "Socket Open")
-                socketEventChannel.send(SocketUpdate(text))
+                //Log.e("Test", text)
+                socketEventChannel.send(Gson().fromJson(text, SocketResponseDto::class.java))
             }
             catch (ex: java.lang.Exception){
 
-                //socketEventChannel.send(SocketUpdate(exception = ex))
+                socketEventChannel.send(SocketResponseDto(exception = ex))
 
             }
         }
@@ -71,12 +70,6 @@ class CoinbaseWebSocketListener (marketRequest: SocketSubscribeDto): WebSocketLi
 
         return fullRequest
     }
-
-    data class SocketUpdate(
-        val text: String? = null,
-        val byteString: ByteString? = null,
-        val exception: Throwable? = null
-    )
 
     companion object {
         const val NORMAL_CLOSURE_STATUS = 1000

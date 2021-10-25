@@ -10,21 +10,14 @@ import com.example.orderbookcompose.common.Constants
 import com.example.orderbookcompose.common.Resource
 import com.example.orderbookcompose.data.network.web_socket.CoinbaseWebSocketListener
 import com.example.orderbookcompose.data.network.web_socket.WebSocketServiceProvider
-import com.example.orderbookcompose.data.network.web_socket.dto.SocketResponseDto
 import com.example.orderbookcompose.data.network.web_socket.dto.SocketSubscribeDto
 import com.example.orderbookcompose.data.repository.WebSocketRepositoryImpl
 import com.example.orderbookcompose.domain.use_case.get_coin.GetCoinUseCase
 import com.example.orderbookcompose.domain.use_case.get_orderbook.GetOrderBookUseCase
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.reactivestreams.Subscription
-import java.util.concurrent.TimeUnit
+import java.util.*
 import javax.inject.Inject
 
 
@@ -46,6 +39,9 @@ class CoinDetailViewModel @Inject constructor(
 
     private val _state = mutableStateOf(CoinDetailState())
     val state: State<CoinDetailState> = _state
+
+    private val _newUpdate = mutableStateOf(sortedMapOf<Float, Float>())
+    val newUpdate: State<SortedMap<Float, Float>> = _newUpdate
 
     init{
         savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let{ coinId ->
@@ -77,6 +73,8 @@ class CoinDetailViewModel @Inject constructor(
 
             is Resource.Success ->{
                 //Log.e("Test", result.data.toString())
+                _newUpdate.value = result.data!!
+                //Log.e("Test", _newUpdate.value.toString())
             }
         }
 

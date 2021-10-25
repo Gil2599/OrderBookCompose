@@ -9,7 +9,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -18,13 +17,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.example.orderbookcompose.data.network.dto.TeamMember
-import com.example.orderbookcompose.presentation.Screen
 import com.example.orderbookcompose.presentation.coin_detail.components.CoinPrice
 import com.example.orderbookcompose.presentation.coin_detail.components.CoinTag
 import com.example.orderbookcompose.presentation.coin_detail.components.TeamListItem
-import com.example.orderbookcompose.presentation.coin_list.components.CoinListItem
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -33,6 +28,7 @@ fun CoinDetailScreen(
 ) {
 
     val state = viewModel.state.value
+    val update = viewModel.newUpdate.value
     Box(modifier = Modifier.fillMaxSize()){
         state.coin?.let { coin ->
             LazyColumn(modifier = Modifier.fillMaxSize(),
@@ -70,7 +66,14 @@ fun CoinDetailScreen(
                     ) {
                         CoinPrice(price = coin.price)
                     }
-                    
+                    /////////////////////////////////////////////////////////////////////////////////////
+                    Spacer(modifier = Modifier.height(150.dp))
+                    Text(
+                        text = update.toString(),
+                        style = MaterialTheme.typography.body2
+                    )
+                    /////////////////////////////////////////////////////////////////////////////////////
+
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
                         text = "Tags",

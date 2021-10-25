@@ -2,6 +2,7 @@ package com.example.orderbookcompose.data.network.web_socket
 
 import android.util.Log
 import com.example.orderbookcompose.common.Constants
+import com.example.orderbookcompose.data.network.web_socket.dto.SocketResponseDto
 import com.example.orderbookcompose.data.network.web_socket.dto.SocketSubscribeDto
 import kotlinx.coroutines.channels.Channel
 import okhttp3.OkHttpClient
@@ -17,7 +18,7 @@ class WebSocketServiceProvider (coinbaseWebSocketListener: CoinbaseWebSocketList
 
     private var _webSocketListener = coinbaseWebSocketListener
 
-    fun startSocket(): Channel<CoinbaseWebSocketListener.SocketUpdate> =
+    fun startSocket(): Channel<SocketResponseDto> =
 
         with(_webSocketListener) {
 

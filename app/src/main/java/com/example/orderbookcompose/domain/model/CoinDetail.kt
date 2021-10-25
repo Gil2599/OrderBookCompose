@@ -2,7 +2,7 @@ package com.example.orderbookcompose.domain.model
 
 import com.example.orderbookcompose.data.network.dto.TeamMember
 
-class CoinDetail(
+data class CoinDetail(
     val coinId: String,
     val name: String,
     val description: String,
