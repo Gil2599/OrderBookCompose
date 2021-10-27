@@ -5,6 +5,6 @@ import java.util.*
 
 data class CoinOderBookState(
     val isLoading: Boolean = false,
-    val coin: SortedMap<Float, Float>? = null,
+    val orderBook: List<Pair<Float, Float>>? = null,
     val error: String = ""
 )

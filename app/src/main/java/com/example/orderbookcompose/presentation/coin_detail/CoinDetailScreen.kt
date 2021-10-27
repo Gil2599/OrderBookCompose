@@ -7,7 +7,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -17,9 +17,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.orderbookcompose.presentation.coin_detail.components.CoinPrice
-import com.example.orderbookcompose.presentation.coin_detail.components.CoinTag
-import com.example.orderbookcompose.presentation.coin_detail.components.TeamListItem
+import com.example.orderbookcompose.presentation.coin_detail.components.*
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -27,10 +25,11 @@ fun CoinDetailScreen(
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
 
-    val state = viewModel.state.value
-    val update = viewModel.newUpdate.value
+    val detailsState = viewModel.stateCoin.value
+    val bookState by viewModel.stateBook.collectAsState()
+
     Box(modifier = Modifier.fillMaxSize()){
-        state.coin?.let { coin ->
+        detailsState.coin?.let { coin ->
             LazyColumn(modifier = Modifier.fillMaxSize(),
                        contentPadding = PaddingValues(20.dp)
             ) {
@@ -67,14 +66,12 @@ fun CoinDetailScreen(
                         CoinPrice(price = coin.price)
                     }
                     /////////////////////////////////////////////////////////////////////////////////////
-                    Spacer(modifier = Modifier.height(150.dp))
-                    Text(
-                        text = update.toString(),
-                        style = MaterialTheme.typography.body2
-                    )
+                    Spacer(modifier = Modifier.height(70.dp))
+
+                    OrderBookComposable(bookState = bookState)
                     /////////////////////////////////////////////////////////////////////////////////////
 
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(70.dp))
                     Text(
                         text = "Tags",
                         style = MaterialTheme.typography.h3
@@ -116,9 +113,9 @@ fun CoinDetailScreen(
 
             }
         }
-        if (state.error.isNotBlank()){
+        if (detailsState.error.isNotBlank()){
             Text(
-                text = state.error,
+                text = detailsState.error,
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -126,7 +123,7 @@ fun CoinDetailScreen(
                     .padding(horizontal = 20.dp)
                     .align(Alignment.Center))
         }
-        if (state.isLoading) {
+        if (detailsState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }

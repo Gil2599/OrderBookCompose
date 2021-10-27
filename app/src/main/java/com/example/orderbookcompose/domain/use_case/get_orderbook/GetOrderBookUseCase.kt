@@ -10,10 +10,7 @@ import com.example.orderbookcompose.domain.model.OrderBookUpdate
 import com.example.orderbookcompose.domain.repository.WebSocketRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancel
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.util.*
 import javax.inject.Inject
@@ -32,7 +29,9 @@ class GetOrderBookUseCase (
 
             emit(Resource.Loading())
 
-            repository.startSocket().consumeEach {
+            val updates = repository.startSocket().consumeAsFlow()
+
+            updates.collect {
 
                 if (it.exception == null) {
                     if (it.toOrderBookUpdate() != null) {
@@ -43,7 +42,8 @@ class GetOrderBookUseCase (
                         }else putAsksMap(update = update)
 
 
-                        emit(Resource.Success(asksMap))
+                        if (asksMap.size >= 10)  emit(Resource.Success(asksMap))
+
                     }
 
 
@@ -56,31 +56,52 @@ class GetOrderBookUseCase (
             }
 
 
+            /*repository.startSocket().consumeEach {
+
+                if (it.exception == null) {
+                    if (it.toOrderBookUpdate() != null) {
+                        update = it.toOrderBookUpdate()!!
+
+                        if (update.isBuy){
+
+                        }else putAsksMap(update = update)
+
+
+                        if (asksMap.size >= 10)  emit(Resource.Success(asksMap))
+
+                    }
+
+
+                } else {
+                    Log.e("ERROR", "Calling closeSocket...")
+                    repository.closeSocket()
+                    onSocketError(it.exception)
+
+                }
+            }*/
+
+
         } catch (e: HttpException){
             emit(
                 Resource.Error(
                     e.localizedMessage ?: "An unexpected error occurred")
             )
         }
-
     }
-
 
     private fun putAsksMap(update: OrderBookUpdate){
 
         if (update.size > 0F){
-            if (asksMap.size < 11)
+            if (asksMap.size < 10)
                 asksMap[update.price] = update.size
 
             else {
-                asksMap[update.price] = update.size
                 asksMap.remove(asksMap.lastKey())
+                asksMap[update.price] = update.size
             }
 
         } else asksMap.remove(update.price)
 
-
-        Log.e("Test", asksMap.toString())
     }
 
 
